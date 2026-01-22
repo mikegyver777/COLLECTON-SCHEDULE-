@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collection Schedule Template</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #1a1a2e;
+            margin-bottom: 5px;
+            font-size: 24px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .week-info {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .week-info label {
+            font-weight: bold;
+            color: #1a1a2e;
+        }
+        
+        .week-info input, .week-info select {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .week-total {
+            background: #0f3460;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+        
+        .week-total span:last-child {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .confidence-summary {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .conf-item {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+        
+        .conf-item.high {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #155724;
+        }
+        
+        .conf-item.med {
+            background: #fff3cd;
+            color: #856404;
+            border: 2px solid #856404;
+        }
+        
+        .conf-item.low {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #721c24;
+        }
+        
+        .conf-item span:last-child {
+            font-size: 16px;
+        }
+        
+        /* Settings Panel */
+        .settings-toggle {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .settings-toggle:hover {
+            background: #5a6268;
+        }
+        
+        .settings-panel {
+            display: none;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .settings-panel.active {
+            display: block;
+        }
+        
+        .settings-panel h3 {
+            margin-bottom: 15px;
+            color: #1a1a2e;
+        }
+        
+        .settings-section {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .settings-group {
+            flex: 1;
+            min-width: 250px;
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        .settings-group h4 {
+            margin-bottom: 10px;
+            color: #16213e;
+            font-size: 14px;
+        }
+        
+        .settings-group ul {
+            list-style: none;
+            margin-bottom: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        .settings-group li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 8px;
+            background: #f5f5f5;
+            margin-bottom: 5px;
+            border-radius: 3px;
+            font-size: 13px;
+        }
+        
+        .settings-group li button {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 2px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        
+        .settings-group .add-option {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .settings-group .add-option input {
+            flex: 1;
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 13px;
+        }
+        
+        .settings-group .add-option button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        
+        .day-section {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .day-header {
+            background: #16213e;
+            color: white;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .day-header input[type="text"] {
+            background: transparent;
+            border: 1px dashed rgba(255,255,255,0.5);
+            color: white;
+            padding: 5px 10px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 3px;
+            width: 280px;
+        }
+        
+        .day-header input[type="text"]::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .day-total {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .collection-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .collection-table th {
+            background: #e8e8e8;
+            color: #1a1a2e;
+            padding: 10px;
+            text-align: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .collection-table td {
+            padding: 5px 6px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+        
+        .collection-table td:first-child {
+            text-align: left;
+        }
+        
+        .collection-table input[type="text"],
+        .collection-table input[type="number"],
+        .collection-table select {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 11px;
+        }
+        
+        .collection-table input[type="number"] {
+            text-align: right;
+        }
+        
+        .collection-table select {
+            background: white;
+        }
+        
+        .collection-table .time-input {
+            width: 55px;
+            text-align: center;
+            background: #f9f9f9;
+        }
+        
+        .collection-table .confidence-select {
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .collection-table .checkbox-cell {
+            background: #f9f9f9;
+            width: 45px;
+        }
+        
+        .print-check {
+            display: none;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .collection-table input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+        
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 3px 6px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 10px;
+        }
+        
+        .delete-btn:hover {
+            background: #c82333;
+        }
+        
+        .move-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 3px 6px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 10px;
+        }
+        
+        .move-btn:hover {
+            background: #0056b3;
+        }
+        
+        .action-cell {
+            display: flex;
+            gap: 3px;
+            justify-content: center;
+        }
+        
+        .add-row-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 13px;
+            margin: 10px;
+        }
+        
+        .add-row-btn:hover {
+            background: #218838;
+        }
+        
+        .add-day-btn {
+            background: #0f3460;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        .add-day-btn:hover {
+            background: #16213e;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .action-buttons button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .print-btn {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        .save-btn {
+            background: #28a745;
+            color: white;
+        }
+        
+        .load-btn {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .clear-btn {
+            background: #dc3545;
+            color: white;
+        }
+        
+        /* Move Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            min-width: 350px;
+            max-width: 90%;
+        }
+        
+        .modal h3 {
+            margin-bottom: 15px;
+            color: #1a1a2e;
+        }
+        
+        .modal p {
+            margin-bottom: 15px;
+            color: #666;
+        }
+        
+        .modal select {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        .modal-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .modal-cancel {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .modal-confirm {
+            background: #007bff;
+            color: white;
+        }
+        
+        @media print {
+            @page {
+                size: letter;
+                margin: 0.3in;
+            }
+            
+            body {
+                background: white;
+                padding: 0;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+            
+            .container {
+                box-shadow: none;
+                padding: 10px;
+                max-width: 100%;
+                transform: scale(0.75);
+                transform-origin: top center;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+            
+            h1 {
+                font-size: 20px;
+                color: black !important;
+                margin-bottom: 3px;
+            }
+            
+            .subtitle {
+                color: black !important;
+                font-size: 12px;
+                margin-bottom: 10px;
+            }
+            
+            .week-total {
+                background: black !important;
+                color: white !important;
+                padding: 8px 15px;
+                margin-bottom: 10px;
+                font-size: 14px;
+            }
+            
+            .collected-total {
+                background: #444 !important;
+            }
+            
+            .week-total span:last-child {
+                font-size: 16px;
+            }
+            
+            .confidence-summary {
+                display: flex;
+                gap: 8px;
+                margin-bottom: 10px;
+            }
+            
+            .conf-item {
+                padding: 6px 10px;
+                font-size: 12px;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                color: black !important;
+            }
+            
+            .conf-item.high {
+                background: #d4edda !important;
+                border: 2px solid black !important;
+            }
+            
+            .conf-item.med {
+                background: #fff3cd !important;
+                border: 2px solid black !important;
+            }
+            
+            .conf-item.low {
+                background: #f8d7da !important;
+                border: 2px solid black !important;
+            }
+            
+            .day-section {
+                margin-bottom: 10px;
+                page-break-inside: avoid;
+                border: 2px solid black !important;
+            }
+            
+            .day-header {
+                background: black !important;
+                color: white !important;
+                padding: 6px 10px;
+            }
+            
+            .day-header input[type="text"] {
+                border: none;
+                background: transparent;
+                color: white !important;
+                font-size: 12px;
+            }
+            
+            .day-total {
+                font-size: 12px;
+            }
+            
+            .collection-table {
+                border-collapse: collapse;
+                border: 2px solid black !important;
+            }
+            
+            .collection-table th {
+                background: #ddd !important;
+                color: black !important;
+                font-size: 9px;
+                padding: 5px;
+                border: 1px solid black !important;
+            }
+            
+            .collection-table td {
+                padding: 4px 5px;
+                font-size: 10px;
+                color: black !important;
+                border: 1px solid black !important;
+            }
+            
+            .collection-table input,
+            .collection-table select:not(.confidence-select) {
+                border: none !important;
+                background: transparent !important;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                font-size: 10px;
+                color: black !important;
+                padding: 2px;
+            }
+            
+            .collection-table .confidence-select {
+                border: none !important;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                font-size: 10px;
+                padding: 2px;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                font-weight: bold !important;
+            }
+            
+            .collection-table .time-input {
+                background: #f0f0f0 !important;
+            }
+            
+            .collection-table .checkbox-cell {
+                background: #f0f0f0 !important;
+            }
+            
+            .collection-table .checkbox-cell input[type="checkbox"] {
+                display: none !important;
+            }
+            
+            .print-check {
+                display: inline !important;
+                font-weight: bold;
+                font-size: 14px;
+                color: black !important;
+            }
+            
+            .delete-btn, .move-btn {
+                display: none;
+            }
+            
+            .modal-overlay {
+                display: none !important;
+            }
+            
+            .settings-panel {
+                display: none !important;
+            }
+            
+            .add-row-btn, .add-day-btn {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>COLLECTION SCHEDULE</h1>
+        
+        <div class="no-print" style="display: flex; gap: 10px; justify-content: center; margin-bottom: 15px;">
+            <button class="settings-toggle" onclick="toggleSettings()">⚙️ Settings (Manage Dropdowns)</button>
+            <button class="print-btn" onclick="window.print()" style="background: #17a2b8; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px;">🖨️ Print</button>
+        </div>
+        
+        <div class="settings-panel no-print" id="settingsPanel">
+            <h3>⚙️ Manage Dropdown Options</h3>
+            <div class="settings-section">
+                <div class="settings-group">
+                    <h4>Project Managers</h4>
+                    <ul id="pmList"></ul>
+                    <div class="add-option">
+                        <input type="text" id="newPmInput" placeholder="Enter name...">
+                        <button onclick="addPmOption()">Add</button>
+                    </div>
+                </div>
+                <div class="settings-group">
+                    <h4>Finance Sources</h4>
+                    <ul id="financeList"></ul>
+                    <div class="add-option">
+                        <input type="text" id="newFinanceInput" placeholder="Enter source...">
+                        <button onclick="addFinanceOption()">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="week-info no-print">
+            <div>
+                <label>Period: </label>
+                <input type="date" id="periodStart" style="width: 130px;" onchange="updatePeriod()">
+                <span> to </span>
+                <input type="date" id="periodEnd" style="width: 130px;" onchange="updatePeriod()">
+            </div>
+            <div>
+                <label>Year: </label>
+                <input type="text" id="year" value="2026" style="width: 80px;">
+            </div>
+            <div>
+                <label>Project Manager: </label>
+                <select id="projectManager" style="width: 180px;">
+                    <option value="">-- Select --</option>
+                </select>
+            </div>
+        </div>
+        <p class="subtitle" id="subtitleDisplay"></p>
+        
+        <div class="week-total">
+            <span>WEEK TOTAL TO COLLECT</span>
+            <span id="grandTotal">$0.00</span>
+        </div>
+        
+        <div class="confidence-summary">
+            <div class="conf-item high">
+                <span>HIGH</span>
+                <span id="highTotal">$0.00</span>
+            </div>
+            <div class="conf-item med">
+                <span>MED</span>
+                <span id="medTotal">$0.00</span>
+            </div>
+            <div class="conf-item low">
+                <span>LOW</span>
+                <span id="lowTotal">$0.00</span>
+            </div>
+        </div>
+        
+        <div class="week-total collected-total" style="background: #28a745;">
+            <span>TOTAL COLLECTED</span>
+            <span id="totalCollected">$0.00</span>
+        </div>
+        
+        <div id="daysContainer">
+            <!-- Days will be added here -->
+        </div>
+        
+        <button class="add-day-btn no-print" onclick="addDay()">+ Add Day</button>
+        
+        <div class="action-buttons no-print">
+            <button class="print-btn" onclick="window.print()">🖨️ Print</button>
+            <button class="save-btn" onclick="saveData()">💾 Save Data</button>
+            <button class="load-btn" onclick="loadData()">📂 Load Data</button>
+            <button class="clear-btn" onclick="clearAll()">🗑️ Clear All</button>
+        </div>
+    </div>
+    
+    <!-- Move Modal -->
+    <div class="modal-overlay" id="moveModal">
+        <div class="modal">
+            <h3>📅 Move Customer</h3>
+            <p id="moveCustomerName">Move "Customer Name" to:</p>
+            <select id="moveDaySelect"></select>
+            <div class="modal-buttons">
+                <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+                <button class="modal-confirm" onclick="confirmMove()">Move</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dropdown options - EDIT THESE TO CHANGE DEFAULT OPTIONS
+        let pmOptions = ["Abraham Medina", "Rudy Soto", "Nick/Ed", "Kyle W."];
+        let financeOptions = ["CASH", "HOMERUN", "SYNCHRONY", "CHECK", "LENDKEY", "AQUA", "FOUNDATION"];
+        
+        // Initial data - starts blank
+        const initialData = {
+            periodStart: "",
+            periodEnd: "",
+            year: "2026",
+            projectManager: "",
+            days: [
+                { dayName: "MONDAY, ", collections: [] },
+                { dayName: "TUESDAY, ", collections: [] },
+                { dayName: "WEDNESDAY, ", collections: [] },
+                { dayName: "THURSDAY, ", collections: [] },
+                { dayName: "FRIDAY, ", collections: [] },
+            ]
+        };
+
+        let dayCounter = 0;
+        let currentMoveRow = null;
+        let currentMoveFromDay = null;
+
+        function init() {
+            // Render dropdown option lists
+            renderPmList();
+            renderFinanceList();
+            updatePmDropdowns();
+            
+            if (initialData.periodStart) {
+                document.getElementById('periodStart').value = initialData.periodStart;
+            }
+            if (initialData.periodEnd) {
+                document.getElementById('periodEnd').value = initialData.periodEnd;
+            }
+            document.getElementById('year').value = initialData.year;
+            document.getElementById('projectManager').value = initialData.projectManager;
+            updateSubtitle();
+            
+            initialData.days.forEach(day => {
+                addDay(day.dayName, day.collections);
+            });
+            
+            // Add event listeners for header inputs
+            document.getElementById('periodStart').addEventListener('change', updateSubtitle);
+            document.getElementById('periodEnd').addEventListener('change', updateSubtitle);
+            document.getElementById('year').addEventListener('input', updateSubtitle);
+            document.getElementById('projectManager').addEventListener('change', updateSubtitle);
+        }
+
+        function formatDateShort(dateStr) {
+            if (!dateStr) return '';
+            const date = new Date(dateStr + 'T00:00:00');
+            return (date.getMonth() + 1) + '/' + date.getDate();
+        }
+
+        function getPeriodString() {
+            const start = document.getElementById('periodStart').value;
+            const end = document.getElementById('periodEnd').value;
+            if (start && end) {
+                return formatDateShort(start) + ' - ' + formatDateShort(end);
+            } else if (start) {
+                return formatDateShort(start);
+            }
+            return '';
+        }
+
+        function updatePeriod() {
+            updateSubtitle();
+        }
+
+        function toggleSettings() {
+            document.getElementById('settingsPanel').classList.toggle('active');
+        }
+
+        // PM Options Management
+        function renderPmList() {
+            const list = document.getElementById('pmList');
+            list.innerHTML = '';
+            pmOptions.forEach((pm, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span>${pm}</span><button onclick="removePmOption(${index})">✕</button>`;
+                list.appendChild(li);
+            });
+        }
+
+        function addPmOption() {
+            const input = document.getElementById('newPmInput');
+            const value = input.value.trim();
+            if (value && !pmOptions.includes(value)) {
+                pmOptions.push(value);
+                renderPmList();
+                updatePmDropdowns();
+                input.value = '';
+            }
+        }
+
+        function removePmOption(index) {
+            pmOptions.splice(index, 1);
+            renderPmList();
+            updatePmDropdowns();
+        }
+
+        function updatePmDropdowns() {
+            // Update header dropdown
+            const headerSelect = document.getElementById('projectManager');
+            const headerValue = headerSelect.value;
+            headerSelect.innerHTML = '<option value="">-- Select --</option>';
+            pmOptions.forEach(pm => {
+                const option = document.createElement('option');
+                option.value = pm;
+                option.textContent = pm;
+                headerSelect.appendChild(option);
+            });
+            headerSelect.value = headerValue;
+            
+            // Update all row dropdowns
+            document.querySelectorAll('.pm-select').forEach(select => {
+                const currentValue = select.value;
+                select.innerHTML = '<option value="">-- Select --</option>';
+                pmOptions.forEach(pm => {
+                    const option = document.createElement('option');
+                    option.value = pm;
+                    option.textContent = pm;
+                    select.appendChild(option);
+                });
+                select.value = currentValue;
+            });
+        }
+
+        // Finance Options Management
+        function renderFinanceList() {
+            const list = document.getElementById('financeList');
+            list.innerHTML = '';
+            financeOptions.forEach((finance, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span>${finance}</span><button onclick="removeFinanceOption(${index})">✕</button>`;
+                list.appendChild(li);
+            });
+        }
+
+        function addFinanceOption() {
+            const input = document.getElementById('newFinanceInput');
+            const value = input.value.trim().toUpperCase();
+            if (value && !financeOptions.includes(value)) {
+                financeOptions.push(value);
+                renderFinanceList();
+                updateFinanceDropdowns();
+                input.value = '';
+            }
+        }
+
+        function removeFinanceOption(index) {
+            financeOptions.splice(index, 1);
+            renderFinanceList();
+            updateFinanceDropdowns();
+        }
+
+        function updateFinanceDropdowns() {
+            document.querySelectorAll('.finance-select').forEach(select => {
+                const currentValue = select.value;
+                select.innerHTML = '<option value="">-- Select --</option>';
+                financeOptions.forEach(finance => {
+                    const option = document.createElement('option');
+                    option.value = finance;
+                    option.textContent = finance;
+                    select.appendChild(option);
+                });
+                select.value = currentValue;
+            });
+        }
+
+        function updateSubtitle() {
+            const period = getPeriodString();
+            const year = document.getElementById('year').value;
+            const pm = document.getElementById('projectManager').value;
+            let subtitle = '';
+            if (period) subtitle += `Period ${period}`;
+            if (year) subtitle += (subtitle ? `, ${year}` : year);
+            if (pm) subtitle += (subtitle ? ` - ${pm}` : pm);
+            document.getElementById('subtitleDisplay').textContent = subtitle;
+        }
+
+        function addDay(dayName = "", collections = []) {
+            dayCounter++;
+            const container = document.getElementById('daysContainer');
+            
+            const daySection = document.createElement('div');
+            daySection.className = 'day-section';
+            daySection.id = `day-${dayCounter}`;
+            daySection.dataset.dayId = dayCounter;
+            
+            const defaultDayName = dayName || "DAY, MONTH DATE, YEAR";
+            
+            daySection.innerHTML = `
+                <div class="day-header">
+                    <input type="text" class="day-name-input" value="${defaultDayName}" placeholder="e.g., MONDAY, JANUARY 19, 2026" onchange="calculateTotals()">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <span class="day-total">Day Total: $0.00</span>
+                        <button class="delete-btn no-print" onclick="deleteDay(${dayCounter})">Delete Day</button>
+                    </div>
+                </div>
+                <table class="collection-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 16%;">CUSTOMER</th>
+                            <th style="width: 9%;">AMOUNT</th>
+                            <th style="width: 12%;">PROJECT MANAGER</th>
+                            <th style="width: 10%;">FINANCE</th>
+                            <th style="width: 8%;">CONFIDENCE</th>
+                            <th style="width: 7%;">TIME</th>
+                            <th style="width: 5%;">✓</th>
+                            <th style="width: 11%;" class="no-print">ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-${dayCounter}">
+                    </tbody>
+                </table>
+                <button class="add-row-btn no-print" onclick="addRow(${dayCounter})">+ Add Customer</button>
+            `;
+            
+            container.appendChild(daySection);
+            
+            // Add initial collections or one empty row
+            if (collections.length > 0) {
+                collections.forEach(c => addRow(dayCounter, c));
+            } else {
+                addRow(dayCounter);
+            }
+            
+            calculateTotals();
+        }
+
+        function addRow(dayId, data = {}) {
+            const tbody = document.getElementById(`tbody-${dayId}`);
+            const row = document.createElement('tr');
+            row.dataset.dayId = dayId;
+            
+            // Build PM options
+            let pmOptionsHtml = '<option value="">-- Select --</option>';
+            pmOptions.forEach(pm => {
+                const selected = data.pm === pm ? 'selected' : '';
+                pmOptionsHtml += `<option value="${pm}" ${selected}>${pm}</option>`;
+            });
+            
+            // Build Finance options
+            let financeOptionsHtml = '<option value="">-- Select --</option>';
+            financeOptions.forEach(finance => {
+                const selected = data.finance === finance ? 'selected' : '';
+                financeOptionsHtml += `<option value="${finance}" ${selected}>${finance}</option>`;
+            });
+            
+            // Build confidence options
+            let confidenceOptionsHtml = '<option value="">--</option>';
+            ['HIGH', 'MED', 'LOW'].forEach(level => {
+                const selected = data.confidence === level ? 'selected' : '';
+                confidenceOptionsHtml += `<option value="${level}" ${selected}>${level}</option>`;
+            });
+            
+            row.innerHTML = `
+                <td><input type="text" value="${data.customer || ''}" placeholder="Customer Name" onchange="calculateTotals()"></td>
+                <td><input type="number" value="${data.amount || ''}" placeholder="0" onchange="calculateTotals()"></td>
+                <td><select class="pm-select">${pmOptionsHtml}</select></td>
+                <td><select class="finance-select">${financeOptionsHtml}</select></td>
+                <td><select class="confidence-select" onchange="updateConfidenceColor(this); calculateTotals()">${confidenceOptionsHtml}</select></td>
+                <td><input type="text" class="time-input" value="${data.time || ''}" placeholder=""></td>
+                <td class="checkbox-cell">
+                    <input type="checkbox" ${data.collected ? 'checked' : ''} onchange="updateCheckmark(this); calculateTotals()">
+                    <span class="print-check">${data.collected ? '✓' : ''}</span>
+                </td>
+                <td class="no-print">
+                    <div class="action-cell">
+                        <button class="move-btn" onclick="openMoveModal(this)">📅 Move</button>
+                        <button class="delete-btn" onclick="deleteRow(this)">✕</button>
+                    </div>
+                </td>
+            `;
+            
+            // Set initial confidence color
+            const confSelect = row.querySelector('.confidence-select');
+            if (confSelect && data.confidence) {
+                updateConfidenceColor(confSelect);
+            }
+            
+            tbody.appendChild(row);
+            calculateTotals();
+        }
+
+        function deleteRow(btn) {
+            btn.closest('tr').remove();
+            calculateTotals();
+        }
+
+        function deleteDay(dayId) {
+            if (confirm('Are you sure you want to delete this day?')) {
+                document.getElementById(`day-${dayId}`).remove();
+                calculateTotals();
+            }
+        }
+
+        function openMoveModal(btn) {
+            const row = btn.closest('tr');
+            currentMoveRow = row;
+            currentMoveFromDay = row.dataset.dayId;
+            
+            const customerName = row.querySelector('input[type="text"]').value || 'This customer';
+            document.getElementById('moveCustomerName').textContent = `Move "${customerName}" to:`;
+            
+            // Populate day select
+            const select = document.getElementById('moveDaySelect');
+            select.innerHTML = '';
+            
+            document.querySelectorAll('.day-section').forEach(section => {
+                const dayId = section.dataset.dayId;
+                const dayName = section.querySelector('.day-name-input').value;
+                
+                const option = document.createElement('option');
+                option.value = dayId;
+                option.textContent = dayName;
+                
+                // Mark current day
+                if (dayId === currentMoveFromDay) {
+                    option.textContent += ' (current)';
+                    option.disabled = true;
+                }
+                
+                select.appendChild(option);
+            });
+            
+            // Add option to create new day
+            const newDayOption = document.createElement('option');
+            newDayOption.value = 'new';
+            newDayOption.textContent = '➕ Create New Day...';
+            select.appendChild(newDayOption);
+            
+            document.getElementById('moveModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('moveModal').classList.remove('active');
+            currentMoveRow = null;
+            currentMoveFromDay = null;
+        }
+
+        function confirmMove() {
+            const select = document.getElementById('moveDaySelect');
+            const targetDayId = select.value;
+            
+            if (!currentMoveRow) {
+                closeModal();
+                return;
+            }
+            
+            // Get row data
+            const inputs = currentMoveRow.querySelectorAll('input');
+            const selects = currentMoveRow.querySelectorAll('select');
+            const rowData = {
+                customer: inputs[0].value,
+                amount: parseFloat(inputs[1].value) || 0,
+                pm: selects[0].value,
+                finance: selects[1].value,
+                confidence: selects[2].value,
+                time: inputs[2].value,
+                collected: inputs[3].checked
+            };
+            
+            // Remove from current location
+            currentMoveRow.remove();
+            
+            if (targetDayId === 'new') {
+                // Create new day and add row
+                const newDayName = prompt('Enter the new day name (e.g., SATURDAY, JANUARY 24, 2026):');
+                if (newDayName) {
+                    addDay(newDayName, [rowData]);
+                } else {
+                    // If cancelled, re-add to original day
+                    addRow(currentMoveFromDay, rowData);
+                }
+            } else {
+                // Add to target day
+                addRow(targetDayId, rowData);
+            }
+            
+            calculateTotals();
+            closeModal();
+        }
+
+        function calculateTotals() {
+            let grandTotal = 0;
+            let totalCollected = 0;
+            let highTotal = 0;
+            let medTotal = 0;
+            let lowTotal = 0;
+            
+            document.querySelectorAll('.day-section').forEach(section => {
+                let dayTotal = 0;
+                section.querySelectorAll('tbody tr').forEach(row => {
+                    const amountInput = row.querySelector('input[type="number"]');
+                    const checkbox = row.querySelector('input[type="checkbox"]');
+                    const confidenceSelect = row.querySelector('.confidence-select');
+                    
+                    if (amountInput && amountInput.value) {
+                        const amount = parseFloat(amountInput.value) || 0;
+                        dayTotal += amount;
+                        
+                        if (checkbox && checkbox.checked) {
+                            totalCollected += amount;
+                        }
+                        
+                        if (confidenceSelect) {
+                            const conf = confidenceSelect.value;
+                            if (conf === 'HIGH') highTotal += amount;
+                            else if (conf === 'MED') medTotal += amount;
+                            else if (conf === 'LOW') lowTotal += amount;
+                        }
+                    }
+                });
+                
+                const dayTotalSpan = section.querySelector('.day-total');
+                dayTotalSpan.textContent = `Day Total: $${dayTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                grandTotal += dayTotal;
+            });
+            
+            document.getElementById('grandTotal').textContent = `$${grandTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('totalCollected').textContent = `$${totalCollected.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('highTotal').textContent = `$${highTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('medTotal').textContent = `$${medTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('lowTotal').textContent = `$${lowTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        }
+
+        function updateCheckmark(checkbox) {
+            const span = checkbox.parentElement.querySelector('.print-check');
+            span.textContent = checkbox.checked ? '✓' : '';
+        }
+
+        function updateConfidenceColor(select) {
+            const value = select.value;
+            select.style.backgroundColor = '';
+            select.style.color = '';
+            select.style.fontWeight = 'bold';
+            
+            if (value === 'HIGH') {
+                select.style.backgroundColor = '#d4edda';
+                select.style.color = '#155724';
+            } else if (value === 'MED') {
+                select.style.backgroundColor = '#fff3cd';
+                select.style.color = '#856404';
+            } else if (value === 'LOW') {
+                select.style.backgroundColor = '#f8d7da';
+                select.style.color = '#721c24';
+            } else {
+                select.style.fontWeight = 'normal';
+            }
+        }
+
+        function saveData() {
+            const data = {
+                periodStart: document.getElementById('periodStart').value,
+                periodEnd: document.getElementById('periodEnd').value,
+                year: document.getElementById('year').value,
+                projectManager: document.getElementById('projectManager').value,
+                pmOptions: pmOptions,
+                financeOptions: financeOptions,
+                days: []
+            };
+            
+            document.querySelectorAll('.day-section').forEach(section => {
+                const dayName = section.querySelector('.day-name-input').value;
+                const collections = [];
+                
+                section.querySelectorAll('tbody tr').forEach(row => {
+                    const inputs = row.querySelectorAll('input');
+                    const selects = row.querySelectorAll('select');
+                    collections.push({
+                        customer: inputs[0].value,
+                        amount: parseFloat(inputs[1].value) || 0,
+                        pm: selects[0].value,
+                        finance: selects[1].value,
+                        confidence: selects[2].value,
+                        time: inputs[2].value,
+                        collected: inputs[3].checked
+                    });
+                });
+                
+                data.days.push({ dayName, collections });
+            });
+            
+            const periodStr = getPeriodString().replace(/\//g, '-').replace(/ /g, '');
+            const json = JSON.stringify(data, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `collection_schedule_${periodStr}_${data.year}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function loadData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        
+                        // Clear existing
+                        document.getElementById('daysContainer').innerHTML = '';
+                        dayCounter = 0;
+                        
+                        // Load dropdown options if present
+                        if (data.pmOptions) {
+                            pmOptions = data.pmOptions;
+                            renderPmList();
+                        }
+                        if (data.financeOptions) {
+                            financeOptions = data.financeOptions;
+                            renderFinanceList();
+                        }
+                        updatePmDropdowns();
+                        updateFinanceDropdowns();
+                        
+                        // Load new data
+                        document.getElementById('periodStart').value = data.periodStart || '';
+                        document.getElementById('periodEnd').value = data.periodEnd || '';
+                        document.getElementById('year').value = data.year;
+                        document.getElementById('projectManager').value = data.projectManager;
+                        updateSubtitle();
+                        
+                        data.days.forEach(day => {
+                            addDay(day.dayName, day.collections);
+                        });
+                        
+                        alert('Data loaded successfully!');
+                    } catch (err) {
+                        alert('Error loading file. Please make sure it is a valid JSON file.');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
+        function clearAll() {
+            if (confirm('Are you sure you want to clear all data?')) {
+                document.getElementById('daysContainer').innerHTML = '';
+                dayCounter = 0;
+                document.getElementById('periodStart').value = '';
+                document.getElementById('periodEnd').value = '';
+                document.getElementById('year').value = '';
+                document.getElementById('projectManager').value = '';
+                updateSubtitle();
+                calculateTotals();
+            }
+        }
+
+        // Allow Enter key to add options
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                if (e.target.id === 'newPmInput') {
+                    addPmOption();
+                } else if (e.target.id === 'newFinanceInput') {
+                    addFinanceOption();
+                }
+            }
+        });
+
+        // Initialize on page load
+        window.onload = init;
+    </script>
+</body>
+</html>
